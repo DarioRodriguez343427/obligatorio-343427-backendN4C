@@ -19,17 +19,12 @@ export const deleteDisciplinaService = async (id) => {
 };
 
 export const updateDisciplinaService = async (id, data) => {
-    const disciplina = await Disciplina.findByIdAndUpdate(id, data, {
-        returnDocument: "after",
-        runValidators: true // esto lo puse para que exita todos los campos
-    });
+    const disciplina = await Disciplina.findByIdAndUpdate(id, data, {returnDocument: "after"});
     return disciplina;
 };
 
 export const replaceDisciplinaService = async (id, data) => {
-    const disciplina = await Disciplina.findOneAndReplace(
-        { _id: id },
-        data,
+    const disciplina = await Disciplina.findOneAndReplace({ _id: id },data,
         {
             returnDocument: "after",
             runValidators: true // esto lo puse para que exita todos los campos

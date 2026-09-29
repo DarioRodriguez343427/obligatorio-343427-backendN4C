@@ -4,11 +4,11 @@ import User from "../models/user.model.js";
 import { Plan } from "../../constants/plan.constants.js";
 
 
-//funcion auxiliar para no estar repidiento el populate y pasar la query por parametro
+// auxiliar para no estar repidiento el populate y pasar la query por parametro
 const populatedClase = (query) => {
     return query
-        .populate("disciplina", "nombre descripcion")
-        .populate("usuario", "name username email plan");
+        .populate("disciplina", "nombre")
+        .populate("usuario", "username plan");
 };
 
 const createServiceError = (message, status) => {
@@ -30,41 +30,61 @@ export const getAllClasesByUserService = async (idUser) => {
     return populatedClase(Clase.find({ usuario: idUser }));
 };
 
+export const getClasesByUserServicePaginated = async (idUser, { pagina, limite }) => {
+    const filtro = { usuario: idUser };
+    const [clases, total] = await Promise.all([
+        populatedClase(
+            Clase.find(filtro)
+                .sort({ _id: -1 })
+                .skip((pagina - 1) * limite)
+                .limit(limite)
+        ),
+        Clase.countDocuments(filtro)
+    ]);
+
+    return {
+        clases,
+        pagina,
+        limite,
+        total,
+        totalPaginas: Math.ceil(total / limite)
+    };
+};
+
 export const getClaseByIdService = async (idClase, idUser) => {
     return populatedClase(Clase.findOne({ _id: idClase, usuario: idUser }));
 };
 
 export const createClaseService = async (idUser, data) => {
-    const [user] = await Promise.all([
-        User.findById(idUser),
-        validateDisciplina(data.disciplina)
-    ]);
+    const user = await User.findById(idUser);
+    await validateDisciplina(data.disciplina);
 
     if (!user) {
         throw createServiceError("Usuario no existe", 404);
     }
 
     if (user.plan === Plan.plus) {
+        //cuando sea plus cuento la cantidad de documentos que tiene la coleccion par ese usuario
         const cantidadClases = await Clase.countDocuments({ usuario: idUser });
 
         if (cantidadClases >= 4) {
-            throw createServiceError(
-                "El plan plus permite crear un máximo de 4 clases",
-                403
-            );
+            throw createServiceError("El plan plus permite crear un máximo de 4 clases",403);
         }
     }
 
-    const clase = await Clase.create({
-        ...data,
-        usuario: idUser
+    const clase = await Clase.create({...data,usuario: idUser});
+
+    await clase.populate({
+        path: "disciplina",
+        select: "nombre"
     });
 
+    await clase.populate({
+        path: "usuario",
+        select: "username plan"
+    });
 
-    return clase.populate([
-        { path: "disciplina", select: "nombre descripcion" },
-        { path: "usuario", select: "name username email plan" }
-    ]);
+    return clase;
 };
 
 export const deleteClaseService = async (idClase, idUser) => {

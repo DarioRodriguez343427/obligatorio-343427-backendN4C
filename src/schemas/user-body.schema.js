@@ -22,6 +22,7 @@ export const updateUserBodySchema = Joi.object({
 .and("password", "confirmPassword")
 .min(1);
 
+//ver que se puede separar con fork o key
 //aca si requiero cabiar todos porque se remplaza el objeto
 export const replaceUserBodySchema = Joi.object({
     name: nameSchema.required(),

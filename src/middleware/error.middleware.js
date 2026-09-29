@@ -9,7 +9,8 @@ export const middlewareErrores = (err, req, res, next) => {
         });
     }
 
-    //no lo hice con common en schema, en este middleware ya controlo el error desde la app, junto con el errores generico de arriba. cada vez que el id no sea del formato que pide retornamos este 400
+    //no lo hice con common en schema, en este middleware ya controlo el error desde la app, junto con el errores generico de arriba.
+    // cada vez que el id no sea del formato que pide mongo retornamos este 400
     if (err.name === 'CastError' && err.kind === 'ObjectId') {
         return res.status(400).json({
         message: 'El ID proporcionado no es válido'

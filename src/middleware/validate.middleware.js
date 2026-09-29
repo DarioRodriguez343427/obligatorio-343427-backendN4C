@@ -16,10 +16,14 @@ export const validateRequest = (schema, reqKey) => {
         if (error) {
             return next(error);
         }
-        req[reqKey] = value;
+        // En Express 5 req.query es de solo lectura.
+        if (reqKey === "query") {
+            res.locals.validatedQuery = value;
+        } else {
+            req[reqKey] = value;
+        }
         return next();
     }
 }
-
 
 

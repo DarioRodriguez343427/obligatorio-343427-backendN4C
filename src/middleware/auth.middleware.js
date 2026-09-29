@@ -35,8 +35,8 @@ export const authMiddleware = (req, res, next) => {
     }
 }
 
-export const adminMiddleware = (req, res, next) => {
-  if (req.user.role !== Role.admin) {
+export const clienteMiddleware = (req, res, next) => {
+  if (req.user.role !== Role.cliente) {
     return res.status(403).json({
       message: "No tenés permisos para realizar esta acción"
     });
