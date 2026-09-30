@@ -17,7 +17,7 @@ export const getClaseByIdController = async (req, res) => {
     const clase = await getClaseByIdService(req.params.idClase, req.user.id);
 
     if (!clase) {
-        return res.status(404).json({ message: "Clase no existe" });
+        return res.status(404).json({ message: "Clase no existe o no pertenece al usuario" });
     }
 
     return res.status(200).json(clase);

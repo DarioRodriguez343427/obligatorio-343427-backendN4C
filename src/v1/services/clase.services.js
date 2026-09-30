@@ -68,6 +68,11 @@ export const createClaseService = async (idUser, data) => {
         throw constructorError("Solo los clientes pueden crear clases", 403);
     }
 
+    const existeClase = await Clase.exists({nombre: data.nombre});
+    if(existeClase){
+        throw constructorError("El nombre de la clase que intenta crear ya existe", 404);
+    }
+
     await validateDisciplina(data.disciplina);
 
     if (user.plan === Plan.plus) {
