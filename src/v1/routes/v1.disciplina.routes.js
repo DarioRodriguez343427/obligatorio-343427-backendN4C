@@ -12,10 +12,12 @@ disciplinasRoutes.use(authMiddleware);
 disciplinasRoutes.get("/", getAllDisciplinasController);
 disciplinasRoutes.get("/:idDisciplina", getDisciplinaByIdController);
 
+
+disciplinasRoutes.use(validateRolAdminMiddleware);
 // solo admin
-disciplinasRoutes.delete("/:idDisciplina", validateRolAdminMiddleware, deleteDisciplinaController);
-disciplinasRoutes.post("/",validateRolAdminMiddleware, middlewareDisciplinaValidateBody, createDisciplinaController);
-disciplinasRoutes.patch("/:idDisciplina",validateRolAdminMiddleware, middlewareUpdateDisciplinaValidateBody, updateDisciplinaController);
-disciplinasRoutes.put("/:idDisciplina",validateRolAdminMiddleware, middlewareDisciplinaValidateBody ,replaceDisciplinaController);
+disciplinasRoutes.delete("/:idDisciplina", deleteDisciplinaController);
+disciplinasRoutes.post("/", middlewareDisciplinaValidateBody, createDisciplinaController);
+disciplinasRoutes.patch("/:idDisciplina", middlewareUpdateDisciplinaValidateBody, updateDisciplinaController);
+disciplinasRoutes.put("/:idDisciplina", middlewareDisciplinaValidateBody ,replaceDisciplinaController);
 
 export default disciplinasRoutes;

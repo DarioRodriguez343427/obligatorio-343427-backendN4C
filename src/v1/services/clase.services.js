@@ -32,9 +32,6 @@ const crearFiltroClases = (idUser, { nombre, disciplina } = {}) => {
     return filtro;
 };
 
-export const getAllClasesByUserService = async (idUser, filtros = {}) => {
-    return populatedClase(Clase.find(crearFiltroClases(idUser, filtros)));
-};
 
 export const getClasesByUserServicePaginated = async (idUser, { pagina, limite, nombre, disciplina }) => {
     const filtro = crearFiltroClases(idUser, { nombre, disciplina });
