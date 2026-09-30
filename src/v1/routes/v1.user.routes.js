@@ -4,19 +4,19 @@ import { changeMyPlanController, deleteUserController, getUserByIdController, re
 import { validateRolAdminMiddleware, validateRolClienteMiddleware } from "../../middleware/rol.middleware.js";
 import { middlewareReplaceUserValidateBody, middlewareUpdateUserValidateBody, middlewareUpdateMyUserValidateBody } from "../../middleware/user.middleware.js";
 
-//controladores
-
 const usersRoutes = Router();
 
+//siempre autorizados
 usersRoutes.use(authMiddleware);
 
-usersRoutes.patch("/", middlewareUpdateMyUserValidateBody, updateUserController);
-usersRoutes.patch("/me", middlewareUpdateMyUserValidateBody, updateUserController);
-usersRoutes.patch("/me/plan", validateRolClienteMiddleware, changeMyPlanController);
+//solo cliente
+usersRoutes.patch("/",validateRolClienteMiddleware, middlewareUpdateMyUserValidateBody, updateUserController);
+usersRoutes.patch("/plan", validateRolClienteMiddleware, changeMyPlanController);
 
+//solo admin
 usersRoutes.use(validateRolAdminMiddleware);
-usersRoutes.patch("/:idUser", middlewareUpdateUserValidateBody, updateUserByIdController);
 
+usersRoutes.patch("/:idUser", middlewareUpdateUserValidateBody, updateUserByIdController);
 usersRoutes.get("/:idUser", getUserByIdController);
 usersRoutes.delete("/:idUser", deleteUserController);
 usersRoutes.put("/:idUser", middlewareReplaceUserValidateBody ,replaceUserController);

@@ -1,20 +1,8 @@
-import {
-    createClaseService,
-    deleteClaseService,
-    getAllClasesByUserService,
-    getClasesByUserServicePaginated,
-    getClaseByIdService,
-    replaceClaseService,
-    updateClaseService
+import {createClaseService, deleteClaseService, getClasesByUserServicePaginated, getClaseByIdService, replaceClaseService, updateClaseService
 } from "../services/clase.services.js";
 
 export const getAllClasesByUserController = async (req, res) => {
     const { pagina, limite, nombre, disciplina } = res.locals.validatedQuery;
-
-    if (pagina === undefined && limite === undefined) {
-        const clases = await getAllClasesByUserService(req.user.id, { nombre, disciplina });
-        return res.status(200).json(clases);
-    }
 
     const resultado = await getClasesByUserServicePaginated(req.user.id, {
         pagina: pagina ?? 1,
