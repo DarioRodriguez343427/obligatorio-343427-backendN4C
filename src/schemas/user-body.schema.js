@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { Roles } from "../constants/role.constants.js";
-import { Planes } from "../constants/plan.constants.js";
+import { Plan, Planes } from "../constants/plan.constants.js";
 
 const nameSchema = Joi.string().trim().min(3).max(30).label("nombre");
 const usernameSchema = Joi.string().trim().alphanum().min(3).max(30);
@@ -32,4 +32,8 @@ export const replaceUserBodySchema = Joi.object({
     plan: planSchema,
     password: passwordSchema.required(),
     confirmPassword: Joi.string().valid(Joi.ref("password")).required()
+});
+
+export const validatePlanPlusBodySchema = Joi.object({
+    role: Joi.string().valid(Plan.plus)
 });

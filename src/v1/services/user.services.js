@@ -2,20 +2,13 @@ import User from "../models/user.model.js";
 import { hashear } from "../../utils/validar-password.js";
 import { Role } from "../../constants/role.constants.js";
 import { Plan } from "../../constants/plan.constants.js";
+import { constructorError } from "../../utils/contructor.error.js";
 
 export const changeMyPlanService = async (idUser) => {
     const user = await User.findById(idUser);
 
     if (!user) {
-        const error = new Error("Usuario no existe");
-        error.status = 404;
-        throw error;
-    }
-
-    if (user.role !== Role.cliente) {
-        const error = new Error("Solo los clientes pueden cambiar de plan");
-        error.status = 403;
-        throw error;
+        throw constructorError("Usuario no existe", 404); 
     }
 
     // La condición también se comprueba al actualizar para evitar dos cambios simultáneos.
@@ -26,9 +19,7 @@ export const changeMyPlanService = async (idUser) => {
     );
 
     if (!updatedUser) {
-        const error = new Error("Solo se puede cambiar de Plus a Premium");
-        error.status = 409;
-        throw error;
+        throw constructorError("Solo se puede cambiar de Plus a Premium", 409); 
     }
 
     return updatedUser;
