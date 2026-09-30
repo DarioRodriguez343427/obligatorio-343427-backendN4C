@@ -46,18 +46,15 @@ export const loginController = async (req, res) => {
 export const registerController = async (req, res) => {
     const data = req.body;
     const user = await createUserService(data);
-    if (user) {
-        return res.status(201).json(user);
-    }
-
-    const userToken = {
+    const token = generateAccessToken({
         id: user._id,
         username: user.username,
         name: user.name,
-        email: user.email
-    }
-    const token = generateAccessToken(userToken);
-    return res.status(200).json({
+        email: user.email,
+        role: user.role
+    });
+
+    return res.status(201).json({
         user,
         token
     });

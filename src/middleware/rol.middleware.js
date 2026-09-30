@@ -8,7 +8,7 @@ const validateRolMiddleware = (role) => {
 
         if (role !== rolCliente) {
             const errorSinRol = constructorError(`No tiene permisos, necesita el rol de ${role} para realizar esta operacion`, 403)
-            next(errorSinRol);
+            return next(errorSinRol);
         }
         next();
     }

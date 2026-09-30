@@ -1,4 +1,6 @@
 import Disciplina from "../models/disciplina.model.js";
+import Clase from "../models/clase.model.js";
+import { constructorError } from "../../utils/contructor.error.js";
 
 
 export const getAllDisciplinasService = async () => {
@@ -14,12 +16,15 @@ export const createDisciplinaService = async (data) => {
 };
 
 export const deleteDisciplinaService = async (id) => {
+    if (await Clase.exists({ disciplina: id })) {
+        throw constructorError("No se puede eliminar una disciplina con clases asociadas", 409);
+    }
     const disciplina = await Disciplina.findByIdAndDelete(id);
     return disciplina;
 };
 
 export const updateDisciplinaService = async (id, data) => {
-    const disciplina = await Disciplina.findByIdAndUpdate(id, data, {returnDocument: "after"});
+    const disciplina = await Disciplina.findByIdAndUpdate(id, data, {returnDocument: "after", runValidators: true});
     return disciplina;
 };
 

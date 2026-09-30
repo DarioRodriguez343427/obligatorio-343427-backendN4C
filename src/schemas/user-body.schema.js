@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { Roles } from "../constants/role.constants.js";
-import { Plan, Planes } from "../constants/plan.constants.js";
+import { Planes } from "../constants/plan.constants.js";
 
 const nameSchema = Joi.string().trim().min(3).max(30).label("nombre");
 const usernameSchema = Joi.string().trim().alphanum().min(3).max(30);
@@ -22,18 +22,11 @@ export const updateUserBodySchema = Joi.object({
 .and("password", "confirmPassword")
 .min(1);
 
-//ver que se puede separar con fork o key
-//aca si requiero cabiar todos porque se remplaza el objeto
-export const replaceUserBodySchema = Joi.object({
-    name: nameSchema.required(),
-    username: usernameSchema.required(),
-    email: emailSchema.required(),
-    role: roleSchema.required(),
-    plan: planSchema,
-    password: passwordSchema.required(),
-    confirmPassword: Joi.string().valid(Joi.ref("password")).required()
-});
+export const replaceUserBodySchema = updateUserBodySchema.fork(
+    ["name", "username", "email", "role", "password", "confirmPassword"],
+    (schema) => schema.required()
+);
 
-export const validatePlanPlusBodySchema = Joi.object({
-    role: Joi.string().valid(Plan.plus)
-});
+export const updateMyUserBodySchema = updateUserBodySchema.fork(
+    ["role", "plan"], (schema) => schema.forbidden()
+);

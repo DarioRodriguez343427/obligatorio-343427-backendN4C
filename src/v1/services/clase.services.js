@@ -2,6 +2,8 @@ import Clase from "../models/clase.model.js";
 import Disciplina from "../models/disciplina.model.js";
 import User from "../models/user.model.js";
 import { Plan } from "../../constants/plan.constants.js";
+import { Role } from "../../constants/role.constants.js";
+import { constructorError } from "../../utils/contructor.error.js";
 
 
 // auxiliar para no estar repidiento el populate y pasar la query por parametro
@@ -11,27 +13,31 @@ const populatedClase = (query) => {
         .populate("usuario", "username plan");
 };
 
-const createServiceError = (message, status) => {
-    const error = new Error(message);
-    error.status = status;
-    error.publicMessage = message;
-    return error;
-};
-
 const validateDisciplina = async (idDisciplina) => {
     const disciplinaExiste = await Disciplina.exists({ _id: idDisciplina });
 
     if (!disciplinaExiste) {
-        throw createServiceError("Disciplina no existe", 404);
+        throw constructorError("Disciplina no existe", 404);
     }
 };
 
-export const getAllClasesByUserService = async (idUser) => {
-    return populatedClase(Clase.find({ usuario: idUser }));
+const crearFiltroClases = (idUser, { nombre, disciplina } = {}) => {
+    const filtro = { usuario: idUser };
+    if (disciplina) filtro.disciplina = disciplina;
+    if (nombre) {
+        // Escapar símbolos para buscar texto literal, no expresiones del usuario.
+        const texto = nombre.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        filtro.nombre = { $regex: texto, $options: "i" };
+    }
+    return filtro;
 };
 
-export const getClasesByUserServicePaginated = async (idUser, { pagina, limite }) => {
-    const filtro = { usuario: idUser };
+export const getAllClasesByUserService = async (idUser, filtros = {}) => {
+    return populatedClase(Clase.find(crearFiltroClases(idUser, filtros)));
+};
+
+export const getClasesByUserServicePaginated = async (idUser, { pagina, limite, nombre, disciplina }) => {
+    const filtro = crearFiltroClases(idUser, { nombre, disciplina });
     const [clases, total] = await Promise.all([
         populatedClase(
             Clase.find(filtro)
@@ -57,18 +63,20 @@ export const getClaseByIdService = async (idClase, idUser) => {
 
 export const createClaseService = async (idUser, data) => {
     const user = await User.findById(idUser);
-    await validateDisciplina(data.disciplina);
 
     if (!user) {
-        throw createServiceError("Usuario no existe", 404);
+        throw constructorError("Usuario no existe", 404);
+    }
+    if (user.role !== Role.cliente) {
+        throw constructorError("Solo los clientes pueden crear clases", 403);
     }
 
-    if (user.plan === Plan.plus) {
-        //cuando sea plus cuento la cantidad de documentos que tiene la coleccion par ese usuario
-        const cantidadClases = await Clase.countDocuments({ usuario: idUser });
+    await validateDisciplina(data.disciplina);
 
-        if (cantidadClases >= 4) {
-            throw createServiceError("El plan plus permite crear un máximo de 4 clases",403);
+    if (user.plan === Plan.plus) {
+        const cantidad = await Clase.countDocuments({ usuario: idUser });
+        if (cantidad >= 4) {
+            throw constructorError("El plan plus permite crear un máximo de 4 clases", 403);
         }
     }
 

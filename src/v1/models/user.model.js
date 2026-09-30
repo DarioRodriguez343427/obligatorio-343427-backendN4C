@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema({
     plan: {
         type: String,
         enum: Planes,
-        default: Plan.plus
     },
     password: {
         type: String,
