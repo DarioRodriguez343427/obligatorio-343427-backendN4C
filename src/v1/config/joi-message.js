@@ -5,5 +5,7 @@ export const mensajesJoi = {
     'string.max': '{{#label}} debe tener como máximo {{#limit}} caracteres',
     'string.email': '{{#label}} debe tener un formato válido',
     'number.min': '{{#label}} debe ser mayor o igual a {{#limit}}',
-    'any.only': '{{#label}} debe ser uno de los siguientes valores: {{#valids}}'
+    'any.only': '{{#label}} debe ser uno de los siguientes valores: {{#valids}}',
+    'string.length': '{{#label}} debe contener exactamente {{#limit}} caracteres',
+    'string.hex': '{{#label}} debe contener solamente caracteres hexadecimales'
 };
