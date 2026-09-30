@@ -107,6 +107,11 @@ export const updateClaseService = async (idClase, idUser, data) => {
         await validateDisciplina(data.disciplina);
     }
 
+    const existeClase = await Clase.exists({nombre: data.nombre});
+    if(existeClase){
+        throw constructorError("El nombre de la clase que intenta actualizar ya existe", 409);
+    }
+
     const clase = await populatedClase(Clase.findOneAndUpdate(
         { _id: idClase, usuario: idUser },
         data,
@@ -120,6 +125,11 @@ export const updateClaseService = async (idClase, idUser, data) => {
 
 export const replaceClaseService = async (idClase, idUser, data) => {
     await validateDisciplina(data.disciplina);
+
+    const existeClase = await Clase.exists({nombre: data.nombre});
+    if(existeClase){
+        throw constructorError("El nombre de la clase que intenta remplazar ya existe", 409);
+    }
 
     const clase = await populatedClase(Clase.findOneAndReplace(
         { _id: idClase, usuario: idUser },

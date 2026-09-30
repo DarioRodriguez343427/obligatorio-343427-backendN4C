@@ -10,8 +10,8 @@ const clasesRoutes = Router();
 clasesRoutes.use(authMiddleware, validateRolClienteMiddleware);
 
 clasesRoutes.get("/", middlewareListarClasesValidateQuery, getAllClasesByUserController);
-clasesRoutes.get("/:idClase", getClaseByIdController);
 clasesRoutes.post("/", middlewareClaseValidateBody, createClaseController);
+clasesRoutes.get("/:idClase", getClaseByIdController);
 clasesRoutes.delete("/:idClase", deleteClaseController);
 clasesRoutes.patch("/:idClase",middlewareUpdateClaseValidateBody ,updateClaseController);
 clasesRoutes.put("/:idClase",middlewareClaseValidateBody ,replaceClaseController);
