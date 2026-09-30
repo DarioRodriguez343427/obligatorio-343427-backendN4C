@@ -68,7 +68,7 @@ export const createClaseService = async (idUser, data) => {
         throw constructorError("Solo los clientes pueden crear clases", 403);
     }
 
-    const existeClase = await Clase.exists({nombre: data.nombre});
+    const existeClase = await Clase.exists({nombre: data.nombre, usuario: idUser});
     if(existeClase){
         throw constructorError("El nombre de la clase que intenta crear ya existe", 409);
     }
@@ -107,7 +107,7 @@ export const updateClaseService = async (idClase, idUser, data) => {
         await validateDisciplina(data.disciplina);
     }
 
-    const existeClase = await Clase.exists({nombre: data.nombre});
+    const existeClase = await Clase.exists({nombre: data.nombre, usuario: idUser});
     if(existeClase){
         throw constructorError("El nombre de la clase que intenta actualizar ya existe", 409);
     }
@@ -126,7 +126,7 @@ export const updateClaseService = async (idClase, idUser, data) => {
 export const replaceClaseService = async (idClase, idUser, data) => {
     await validateDisciplina(data.disciplina);
 
-    const existeClase = await Clase.exists({nombre: data.nombre});
+    const existeClase = await Clase.exists({nombre: data.nombre, usuario: idUser});
     if(existeClase){
         throw constructorError("El nombre de la clase que intenta remplazar ya existe", 409);
     }
