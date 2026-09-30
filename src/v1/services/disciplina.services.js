@@ -12,6 +12,12 @@ export const getDisciplinaByIdService = async (id) => {
 };
 
 export const createDisciplinaService = async (data) => {
+    const disciplina = await Disciplina.findOne({nombre: data.nombre});
+
+    if (disciplina) {
+        throw constructorError("Ya existe una disciplina con ese nombre",409);
+    }
+
     return Disciplina.create(data);
 };
 
