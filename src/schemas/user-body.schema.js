@@ -17,7 +17,7 @@ export const updateUserBodySchema = Joi.object({
     role: roleSchema,
     plan: planSchema,
     password: passwordSchema,
-    confirmPassword: Joi.string().valid(Joi.ref("password"))
+    confirmPassword: Joi.string().valid(Joi.ref("password")).messages({"any.only": "Las contraseñas ingresadas no son iguales, verifique"})
 })
 .and("password", "confirmPassword")
 .min(1);
