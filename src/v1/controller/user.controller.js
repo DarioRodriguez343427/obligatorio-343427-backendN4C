@@ -29,7 +29,7 @@ export const getUserByIdController = async (req, res) => {
 
 export const updateUserController = async (req, res) => {
 	const data = req.body;
-	const { idUser } = req.params;
+	const idUser = req.user?.id;
 	const user = await updateUserService(idUser, data);
 	if (!user) {
 		return res.status(404).json({message: "Usuario no existe"});
