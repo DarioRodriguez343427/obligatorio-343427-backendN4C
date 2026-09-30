@@ -20,10 +20,6 @@ const claseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "usuarios",
     required: true
-  },
-  imagen: {
-    type: String,
-    trim: true
   }
 });
 

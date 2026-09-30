@@ -1,8 +1,8 @@
 import {Router} from "express";
 import { authMiddleware } from "../../middleware/auth.middleware.js";
-import { changeMyPlanController, deleteUserController, getUserByIdController, replaceUserController, updateUserController } from "../controller/user.controller.js";
+import { changeMyPlanController, deleteUserController, getUserByIdController, replaceUserController, updateUserController, updateUserByIdController } from "../controller/user.controller.js";
 import { validateRolAdminMiddleware, validateRolClienteMiddleware } from "../../middleware/rol.middleware.js";
-import { middlewareReplaceUserValidateBody, middlewareUpdateUserValidateBody, validatePlanClienteMiddleware } from "../../middleware/user.middleware.js";
+import { middlewareReplaceUserValidateBody, middlewareUpdateUserValidateBody, middlewareUpdateMyUserValidateBody } from "../../middleware/user.middleware.js";
 
 //controladores
 
@@ -10,10 +10,12 @@ const usersRoutes = Router();
 
 usersRoutes.use(authMiddleware);
 
-usersRoutes.patch("/", middlewareUpdateUserValidateBody ,updateUserController);
-usersRoutes.patch("/me/plan", validateRolClienteMiddleware, validatePlanClienteMiddleware, changeMyPlanController);
+usersRoutes.patch("/", middlewareUpdateMyUserValidateBody, updateUserController);
+usersRoutes.patch("/me", middlewareUpdateMyUserValidateBody, updateUserController);
+usersRoutes.patch("/me/plan", validateRolClienteMiddleware, changeMyPlanController);
 
 usersRoutes.use(validateRolAdminMiddleware);
+usersRoutes.patch("/:idUser", middlewareUpdateUserValidateBody, updateUserByIdController);
 
 usersRoutes.get("/:idUser", getUserByIdController);
 usersRoutes.delete("/:idUser", deleteUserController);

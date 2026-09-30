@@ -37,6 +37,14 @@ export const updateUserController = async (req, res) => {
 	return res.status(200).json(user);
 }
 
+export const updateUserByIdController = async (req, res) => {
+    const user = await updateUserService(req.params.idUser, req.body);
+    if (!user) {
+        return res.status(404).json({ message: "Usuario no existe" });
+    }
+    return res.status(200).json(user);
+};
+
 export const replaceUserController = async (req, res) => {
 	const data = req.body;
 	const { idUser } = req.params;

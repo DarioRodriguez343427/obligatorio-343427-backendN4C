@@ -4,7 +4,7 @@ import apiRoutes from "./src/v1/routes/index.js";
 import "dotenv/config";
 import { connectMongo } from "./src/v1/config/mongo.config.js";
 
-connectMongo();
+await connectMongo();
 
 const app = express();
 

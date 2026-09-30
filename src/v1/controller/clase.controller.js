@@ -9,16 +9,18 @@ import {
 } from "../services/clase.services.js";
 
 export const getAllClasesByUserController = async (req, res) => {
-    const { pagina, limite } = res.locals.validatedQuery;
+    const { pagina, limite, nombre, disciplina } = res.locals.validatedQuery;
 
     if (pagina === undefined && limite === undefined) {
-        const clases = await getAllClasesByUserService(req.user.id);
+        const clases = await getAllClasesByUserService(req.user.id, { nombre, disciplina });
         return res.status(200).json(clases);
     }
 
     const resultado = await getClasesByUserServicePaginated(req.user.id, {
         pagina: pagina ?? 1,
-        limite: limite ?? 20
+        limite: limite ?? 20,
+        nombre,
+        disciplina
     });
     return res.status(200).json(resultado);
 };
