@@ -70,7 +70,7 @@ export const createClaseService = async (idUser, data) => {
 
     const existeClase = await Clase.exists({nombre: data.nombre});
     if(existeClase){
-        throw constructorError("El nombre de la clase que intenta crear ya existe", 404);
+        throw constructorError("El nombre de la clase que intenta crear ya existe", 409);
     }
 
     await validateDisciplina(data.disciplina);
