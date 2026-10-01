@@ -10,7 +10,7 @@
       "name": "auth",
       "item": [
         {
-          "name": "Register",
+          "name": "Register - 201",
           "event": [
             {
               "listen": "prerequest",
@@ -57,7 +57,101 @@
           "response": []
         },
         {
-          "name": "Login",
+          "name": "Register - 409",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\n\r\n"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El username o email ya existen\", function () {\r\n    pm.response.to.have.status(409);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"{{$randomUserName}}\",\r\n  \"username\": \"{{username}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"cliente1\",\r\n  \"confirmPassword\": \"cliente1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register - 400",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\n\r\n"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Todos los campos son obligatorios\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"{{$randomUserName}}\",\r\n  \"username\": \"\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"cliente1\",\r\n  \"confirmPassword\": \"cliente1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login -200",
           "event": [
             {
               "listen": "test",
@@ -93,6 +187,120 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Login - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Todos los campos son obligatorios\", function () {\r\n    pm.response.to.have.status(400);    \r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"identificador\": \"{{email}}\",\r\n  \"password\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Usuario o contraseña incorrectos\", function () {\r\n    pm.response.to.have.status(401);    \r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"identificador\": \"{{email}}\",\r\n  \"password\": \"{{$randomPassword}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Usuario inactivo\", function () {\r\n    pm.response.to.have.status(403);    \r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"identificador\": \"diego_lindgren54@yahoo.com\",\r\n  \"password\": \"cliente1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -100,7 +308,7 @@
       "name": "disciplina",
       "item": [
         {
-          "name": "GetAllDisciplinas",
+          "name": "GetAllDisciplinas - 200",
           "event": [
             {
               "listen": "test",
@@ -150,7 +358,107 @@
           "response": []
         },
         {
-          "name": "CreateDisciplina",
+          "name": "GetAllDisciplinas - 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Falta token o token invalido\", function () {\r\n    pm.response.to.have.status(401);\r\n});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetAllDisciplinas - 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Token de usuario inactivo\", function () {\r\n    pm.response.to.have.status(403);\r\n});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_usuario_inactivo}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateDisciplina - 403",
           "event": [
             {
               "listen": "test",
@@ -197,7 +505,231 @@
           "response": []
         },
         {
-          "name": "GetDisciplinaById",
+          "name": "CreateDisciplina - 201",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Disciplina creada con exito\", function () {\r\n    pm.response.to.have.status(201);\r\n\r\n    const disciplina = pm.response.json();\r\n    pm.collectionVariables.set(\"disciplinaId\", disciplina.id);\r\n});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const disciplinas = [\"Futbol\",\"Basquetbol\",\"Tenis\",\"Natacion\",\"Boxeo\",\"Karate\",\"Voleibol\",\"Atletismo\",\"Hockey\",\"Ciclismo\"];\r\n\r\nconst posicionAleatoria = Math.floor(Math.random() * disciplinas.length);\r\nconst disciplina = disciplinas[posicionAleatoria];\r\n\r\nconst numero = Math.floor(Math.random() * 1000000);\r\nconst disciplinaRandom = `${disciplina}-${numero}`;\r\n\r\npm.collectionVariables.set(\"disciplina_random\", disciplinaRandom);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"{{disciplina_random}}\",\r\n  \"descripcion\": \"{{$randomWords}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateDisciplina - 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Ya existe una disciplina con este nombre\", function () {\r\n    pm.response.to.have.status(409);\r\n});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const disciplinas = [\"Futbol\",\"Basquetbol\",\"Tenis\",\"Natacion\",\"Boxeo\",\"Karate\",\"Voleibol\",\"Atletismo\",\"Hockey\",\"Ciclismo\"];\r\n\r\nconst posicionAleatoria = Math.floor(Math.random() * disciplinas.length);\r\nconst disciplina = disciplinas[posicionAleatoria];\r\n\r\nconst numero = Math.floor(Math.random() * 1000000);\r\nconst disciplinaRandom = `${disciplina}-${numero}`;\r\n\r\npm.collectionVariables.set(\"disciplina_random\", disciplinaRandom);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"natacion\",\r\n  \"descripcion\": \"{{$randomWords}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateDisciplina - 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No existe token\", function () {\r\n    pm.response.to.have.status(401);\r\n});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const disciplinas = [\"Futbol\",\"Basquetbol\",\"Tenis\",\"Natacion\",\"Boxeo\",\"Karate\",\"Voleibol\",\"Atletismo\",\"Hockey\",\"Ciclismo\"];\r\n\r\nconst posicionAleatoria = Math.floor(Math.random() * disciplinas.length);\r\nconst disciplina = disciplinas[posicionAleatoria];\r\n\r\nconst numero = Math.floor(Math.random() * 1000000);\r\nconst disciplinaRandom = `${disciplina}-${numero}`;\r\n\r\npm.collectionVariables.set(\"disciplina_random\", disciplinaRandom);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"{{disciplina_random}}\",\r\n  \"descripcion\": \"{{$randomWords}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateDisciplina - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Todos los campos son obligatorios\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const disciplinas = [\"Futbol\",\"Basquetbol\",\"Tenis\",\"Natacion\",\"Boxeo\",\"Karate\",\"Voleibol\",\"Atletismo\",\"Hockey\",\"Ciclismo\"];\r\n\r\nconst posicionAleatoria = Math.floor(Math.random() * disciplinas.length);\r\nconst disciplina = disciplinas[posicionAleatoria];\r\n\r\nconst numero = Math.floor(Math.random() * 1000000);\r\nconst disciplinaRandom = `${disciplina}-${numero}`;\r\n\r\npm.collectionVariables.set(\"disciplina_random\", disciplinaRandom);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"{{disciplina_random}}\",\r\n  \"descripcion\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetDisciplinaById - 200",
           "event": [
             {
               "listen": "test",
@@ -236,14 +768,14 @@
           "response": []
         },
         {
-          "name": "DeleteDisciplina",
+          "name": "GetDisciplinaById - 404",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"No tiene permisos de administrador\", function () {\r\n    pm.response.to.have.status(403);\r\n});"
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});"
                 ]
               }
             }
@@ -259,17 +791,8 @@
                 }
               ]
             },
-            "method": "DELETE",
+            "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
               "host": [
@@ -284,7 +807,124 @@
           "response": []
         },
         {
-          "name": "UpdateDisciplina",
+          "name": "GetDisciplinaById - 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Accion denegada - cliente inactivo\", function () {\r\n    pm.response.to.have.status(403);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_usuario_inactivo}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{id_disciplina}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetDisciplinaById - 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No se recibio token\", function () {\r\n    pm.response.to.have.status(401);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{id_disciplina}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetDisciplinaById - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El id no es correcto\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/disciplinas/1234",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "1234"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateDisciplina - 403",
           "event": [
             {
               "listen": "test",
@@ -332,7 +972,199 @@
           "response": []
         },
         {
-          "name": "ReplaceDisciplina",
+          "name": "UpdateDisciplina - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Disciplina actualizada correctamente\", function () {\r\n    pm.response.to.have.status(200);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"descripcion\": \"Clases de yoga diferentes niveles y edades\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{id_disciplina}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateDisciplina - 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Ya existe una disciplina con ese nombre\", function () {\r\n    pm.response.to.have.status(409);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\" : \"Funcional\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{id_disciplina}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateDisciplina - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Uno o mas campos estan vacios\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"descripcion\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{id_disciplina}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateDisciplina - 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No se recibe token\", function () {\r\n    pm.response.to.have.status(401);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"descripcion\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{id_disciplina}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ReplaceDisciplina - 403",
           "event": [
             {
               "listen": "test",
@@ -378,6 +1210,342 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "ReplaceDisciplina - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Disciplina remplazada con exito\", function () {\r\n    pm.response.to.have.status(200);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"natacion\",\r\n  \"descripcion\": \"Clases de natacion para todo publico\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{id_disciplina}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ReplaceDisciplina - 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Ya existe una disciplina con ese nombre\", function () {\r\n    pm.response.to.have.status(409);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"natacion\",\r\n  \"descripcion\": \"Clases de natacion para todo publico\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/6abd47452e9f56c6f4e517d7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "6abd47452e9f56c6f4e517d7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ReplaceDisciplina - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Uno o mas campos estan vacios\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"natacion\",\r\n  \"descripcion\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{id_disciplina}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteDisciplina - 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No tiene permisos de administrador\", function () {\r\n    pm.response.to.have.status(403);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{id_disciplina}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{id_disciplina}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteDisciplina - 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Disciplina no existe\", function () {\r\n    pm.response.to.have.status(404);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/6ab97a4c65172f6ba2204877",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "6ab97a4c65172f6ba2204877"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteDisciplina - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"ID no es valido\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/asdasdasd",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "asdasdasd"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteDisciplina - 204",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Disciplina eliminada con exito\", function () {\r\n    pm.response.to.have.status(204);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/disciplinas/{{disciplinaId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "disciplinas",
+                "{{disciplinaId}}"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -385,7 +1553,7 @@
       "name": "clase",
       "item": [
         {
-          "name": "createClase",
+          "name": "createClase - 201",
           "event": [
             {
               "listen": "test",
@@ -432,7 +1600,148 @@
           "response": []
         },
         {
-          "name": "getClaseById",
+          "name": "createClase - 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Llego a su limite con cuenta plus\", function () {\r\n    pm.response.to.have.status(403);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_limite_plus}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"clase {{$randomWord}}\",\r\n  \"descripcion\": \"Clase para mejorar la fuerza, el equilibrio y el control corporal\",\r\n  \"disciplina\": \"{{id_disciplina}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "createClase - 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No se recibe token\", function () {\r\n    pm.response.to.have.status(401);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"clase {{$randomWord}}\",\r\n  \"descripcion\": \"Clase para mejorar la fuerza, el equilibrio y el control corporal\",\r\n  \"disciplina\": \"{{id_disciplina}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "createClase - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Uno o mas campos estan vacios\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"\",\r\n  \"descripcion\": \"Clase para mejorar la fuerza, el equilibrio y el control corporal\",\r\n  \"disciplina\": \"{{id_disciplina}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getClaseById - 200",
           "event": [
             {
               "listen": "test",
@@ -480,7 +1789,103 @@
           "response": []
         },
         {
-          "name": "getAllClasesByUser",
+          "name": "getClaseById - 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Necesita tener rol cliente para esta accion\", function () {\r\n    pm.response.to.have.status(403);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases/{{clase_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases",
+                "{{clase_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getClaseById - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"ID invalido\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases/abcd",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases",
+                "abcd"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getAllClasesByUser - 200",
           "event": [
             {
               "listen": "prerequest",
@@ -546,7 +1951,139 @@
           "response": []
         },
         {
-          "name": "ReplaceClase",
+          "name": "getAllClasesByUser - 403",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"pagina\", 1);\r\npm.collectionVariables.set(\"limite\", 5);\r\n\r\n"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(403);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_usuario_inactivo}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases?pagina={{pagina}}&limite={{limite}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "{{pagina}}"
+                },
+                {
+                  "key": "limite",
+                  "value": "{{limite}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getAllClasesByUser - 400",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"pagina\", 1);\r\npm.collectionVariables.set(\"limite\", 5);\r\n\r\n"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"debe ingresar ambos parametros pagina y limite\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases?pagina={{pagina}}&limite=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "{{pagina}}"
+                },
+                {
+                  "key": "limite",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ReplaceClase - 200",
           "event": [
             {
               "listen": "test",
@@ -594,7 +2131,103 @@
           "response": []
         },
         {
-          "name": "UpdateClase",
+          "name": "ReplaceClase - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"uno o mas campos estan vacios\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"clase {{$randomWord}}\",\r\n  \"descripcion\": \"\",\r\n  \"disciplina\": \"{{id_disciplina}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases/{{clase_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases",
+                "{{clase_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ReplaceClase - 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No tiene permisos necesita rol de cliente\", function () {\r\n    pm.response.to.have.status(403);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"clase {{$randomWord}}\",\r\n  \"descripcion\": \"\",\r\n  \"disciplina\": \"{{id_disciplina}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases/{{clase_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases",
+                "{{clase_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateClase - 200",
           "event": [
             {
               "listen": "test",
@@ -642,7 +2275,199 @@
           "response": []
         },
         {
-          "name": "deleteClase",
+          "name": "UpdateClase - 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Clase no existe o no pertenece al usuario\", function () {\r\n    pm.response.to.have.status(404);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_limite_plus}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"clase {{$randomWord}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases/{{clase_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases",
+                "{{clase_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateClase - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Debe ingresar al menos un valor a actualizar\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases/{{clase_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases",
+                "{{clase_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteClase  - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"ID Invalido\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases/abcd",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases",
+                "abcd"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteClase - 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No tiene permisos para eliminar, debe ser cliente\", function () {\r\n    pm.response.to.have.status(403);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clases/{{clase_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clases",
+                "{{clase_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteClase - 204",
           "event": [
             {
               "listen": "test",
@@ -1081,7 +2906,7 @@
   "variable": [
     {
       "key": "username",
-      "value": "usuario667175"
+      "value": "usuario50912"
     },
     {
       "key": "prod_base_url",
@@ -1101,11 +2926,11 @@
     },
     {
       "key": "token",
-      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmVhNjMzNTdhMDY0ZDg5NWE0ZDcwYiIsInVzZXJuYW1lIjoidXN1YXJpbzk1NzM4MyIsIm5hbWUiOiJGcmVkeV9BdWVyIiwiZW1haWwiOiJjbGFyaXNzYS5iZWFoYW4xNEBob3RtYWlsLmNvbSIsInJvbGUiOiJjbGllbnRlIiwiaWF0IjoxNzkwODc5Mjg0LCJleHAiOjE3OTI2MDcyODQsImF1ZCI6Imp3dC1kZW1vLWNsaWVudCIsImlzcyI6Imp3dC1kZW1vLWFwaSJ9.YVLpx9zxlQ3od3vu0jipE3yMytp1PQC5lo8KjNtMwdY"
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmVkYjQ1OTdlNzMxYzZjZWE2YjQyMCIsInVzZXJuYW1lIjoidXN1YXJpbzQ1NjY0MiIsIm5hbWUiOiJNYXJnaWVfRG91Z2xhczk1IiwiZW1haWwiOiJrYXRyaW5hX3BhZ2FjQGdtYWlsLmNvbSIsInJvbGUiOiJjbGllbnRlIiwiaWF0IjoxNzkwODkyODcxLCJleHAiOjE3OTI2MjA4NzEsImF1ZCI6Imp3dC1kZW1vLWNsaWVudCIsImlzcyI6Imp3dC1kZW1vLWFwaSJ9.aD7H55aUMk3Nk0esNrD4LmkxyL8oc5YzJ0YX4vp222c"
     },
     {
       "key": "email",
-      "value": "clarissa.beahan14@hotmail.com"
+      "value": "katrina_pagac@gmail.com"
     },
     {
       "key": "password",
@@ -1121,7 +2946,7 @@
     },
     {
       "key": "clase_id",
-      "value": "6abea63857a064d895a4d70c"
+      "value": "6abedb5497e731c6cea6b422"
     },
     {
       "key": "id_disciplina",
@@ -1129,15 +2954,31 @@
     },
     {
       "key": "disciplina_random",
-      "value": "Hockey"
+      "value": "Voleibol"
     },
     {
       "key": "departamento_random",
-      "value": "tacuarembo"
+      "value": "paysandu"
     },
     {
       "key": "fecha_random",
       "value": "2026-10-12"
+    },
+    {
+      "key": "token_usuario_inactivo",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmU2ODViMmRmZDVjYmJjMTM5M2JhYiIsInVzZXJuYW1lIjoidXN1YXJpbzM0MDc0NiIsIm5hbWUiOiJHcmFudC5HcmVlbjk4IiwiZW1haWwiOiJkaWVnb19saW5kZ3JlbjU0QHlhaG9vLmNvbSIsInJvbGUiOiJjbGllbnRlIiwiaWF0IjoxNzkwODg4NTk1LCJleHAiOjE3OTI2MTY1OTUsImF1ZCI6Imp3dC1kZW1vLWNsaWVudCIsImlzcyI6Imp3dC1kZW1vLWFwaSJ9.YbVSXCdgW6Xj3SdFnoUgg5M14nZLJ2QA4cSyDqxgR9g"
+    },
+    {
+      "key": "token_admin",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjk5ZGQwYWI3ODk3N2Q1NzQwOGI0NSIsInVzZXJuYW1lIjoiZGFyaW9BZG1pbiIsIm5hbWUiOiJkYXJpbyIsImVtYWlsIjoiZGFyaW9AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkwODg4OTQ1LCJleHAiOjE3OTI2MTY5NDUsImF1ZCI6Imp3dC1kZW1vLWNsaWVudCIsImlzcyI6Imp3dC1kZW1vLWFwaSJ9.bb7-W0ybIhSuHRovYho8NGvg1ViLvFVudeHCr21gOgk"
+    },
+    {
+      "key": "disciplinaId",
+      "value": "6abedb4b97e731c6cea6b421"
+    },
+    {
+      "key": "token_limite_plus",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmVjOTZlNjA3YThhMDMyZWI0NzEyZSIsInVzZXJuYW1lIjoidXN1YXJpbzE1NzA3MSIsIm5hbWUiOiJEYWhsaWEuVHJldXRlbDkwIiwiZW1haWwiOiJsaW5uZWE1MEBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50ZSIsImlhdCI6MTc5MDg4ODk4OCwiZXhwIjoxNzkyNjE2OTg4LCJhdWQiOiJqd3QtZGVtby1jbGllbnQiLCJpc3MiOiJqd3QtZGVtby1hcGkifQ.ZFayvICyHAVnBkOxr2dJAIuMbsGWi_pUR4KgIbbqYLY"
     }
   ]
 }
