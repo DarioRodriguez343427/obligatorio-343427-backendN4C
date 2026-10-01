@@ -30,11 +30,23 @@ export const deleteDisciplinaService = async (id) => {
 };
 
 export const updateDisciplinaService = async (id, data) => {
+    if (data.nombre !== undefined) {
+        const existeDisciplina = await Disciplina.findOne({ nombre: data.nombre, _id: { $ne: id } });
+        if (existeDisciplina) {
+            throw constructorError("Ya existe una disciplina con ese nombre", 409);
+        }
+    }
+
     const disciplina = await Disciplina.findByIdAndUpdate(id, data, {returnDocument: "after", runValidators: true});
     return disciplina;
 };
 
 export const replaceDisciplinaService = async (id, data) => {
+    const existeDisciplina = await Disciplina.findOne({ nombre: data.nombre, _id: { $ne: id } });
+    if (existeDisciplina) {
+        throw constructorError("Ya existe una disciplina con ese nombre", 409);
+    }
+
     const disciplina = await Disciplina.findOneAndReplace({ _id: id },data,
         {
             returnDocument: "after",

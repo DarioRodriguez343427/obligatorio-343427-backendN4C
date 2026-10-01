@@ -25,6 +25,22 @@ export const changeMyPlanService = async (idUser) => {
     return updatedUser;
 };
 
+const validarDatosUnicos = async (id, data) => {
+    if (data.email !== undefined) {
+        const usuario = await User.findOne({ email: data.email, _id: { $ne: id } });
+        if (usuario) {
+            throw constructorError("El email ya está registrado", 409);
+        }
+    }
+
+    if (data.username !== undefined) {
+        const usuario = await User.findOne({ username: data.username, _id: { $ne: id } });
+        if (usuario) {
+            throw constructorError("El username ya está registrado", 409);
+        }
+    }
+};
+
 const prepareUserData = async (data) => {
     const { confirmPassword, ...userData } = data;
 
@@ -58,6 +74,7 @@ export const deleteUserService = async (id) => {
 
 //modificar algunos campos
 export const updateUserService = async (id, data) => {
+    await validarDatosUnicos(id, data);
     const userData = await prepareUserData(data);
 
     const user = await User.findOneAndUpdate({ _id: id, role: Role.cliente }, userData, {
@@ -75,6 +92,7 @@ export const replaceUserService = async (id, data) => {
         throw constructorError("Cliente no existe", 404);
     }
 
+    await validarDatosUnicos(id, data);
     const userData = await prepareUserData(data);
 
     userData.role = usuarioActual.role;

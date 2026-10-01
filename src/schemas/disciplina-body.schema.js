@@ -7,5 +7,5 @@ export const disciplinaBodySchema = Joi.object({
 
 export const updateDisciplinaBodySchema = Joi.object({
     nombre: Joi.string().trim().min(2).max(50),
-    descripcion: Joi.string().max(500).allow("")
+    descripcion: Joi.string().trim().max(500)
 }).min(1);
