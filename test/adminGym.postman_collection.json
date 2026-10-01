@@ -1081,63 +1081,63 @@
   "variable": [
     {
       "key": "username",
-      "value": ""
+      "value": "usuario667175"
     },
     {
       "key": "prod_base_url",
-      "value": ""
+      "value": "https://obligatorio-343427-backend-n4-c.vercel.app"
     },
     {
       "key": "dev_base_url",
-      "value": ""
+      "value": "http://localhost:3000"
     },
     {
       "key": "base_url",
-      "value": ""
+      "value": "{{prod_base_url}}/api/v1"
     },
     {
       "key": "user_id",
-      "value": ""
+      "value": "6abe3e212dfd5cbbc1393ba1"
     },
     {
       "key": "token",
-      "value": ""
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmVhNjMzNTdhMDY0ZDg5NWE0ZDcwYiIsInVzZXJuYW1lIjoidXN1YXJpbzk1NzM4MyIsIm5hbWUiOiJGcmVkeV9BdWVyIiwiZW1haWwiOiJjbGFyaXNzYS5iZWFoYW4xNEBob3RtYWlsLmNvbSIsInJvbGUiOiJjbGllbnRlIiwiaWF0IjoxNzkwODc5Mjg0LCJleHAiOjE3OTI2MDcyODQsImF1ZCI6Imp3dC1kZW1vLWNsaWVudCIsImlzcyI6Imp3dC1kZW1vLWFwaSJ9.YVLpx9zxlQ3od3vu0jipE3yMytp1PQC5lo8KjNtMwdY"
     },
     {
       "key": "email",
-      "value": ""
+      "value": "clarissa.beahan14@hotmail.com"
     },
     {
       "key": "password",
-      "value": ""
+      "value": "cliente1"
     },
     {
       "key": "pagina",
-      "value": ""
+      "value": 1
     },
     {
       "key": "limite",
-      "value": ""
+      "value": 5
     },
     {
       "key": "clase_id",
-      "value": ""
+      "value": "6abea63857a064d895a4d70c"
     },
     {
       "key": "id_disciplina",
-      "value": ""
+      "value": "6ab97a4c65172f6ba6704877"
     },
     {
       "key": "disciplina_random",
-      "value": ""
+      "value": "Hockey"
     },
     {
       "key": "departamento_random",
-      "value": ""
+      "value": "tacuarembo"
     },
     {
       "key": "fecha_random",
-      "value": ""
+      "value": "2026-10-12"
     }
   ]
 }
