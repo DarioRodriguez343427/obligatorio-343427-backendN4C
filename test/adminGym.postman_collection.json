@@ -692,6 +692,68 @@
       ]
     },
     {
+      "name": "ia",
+      "item": [
+        {
+          "name": "GenerateDescription",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const disciplinas = [\"Futbol\",\"Basquetbol\",\"Tenis\",\"Natacion\",\"Boxeo\",\"Karate\",\"Voleibol\",\"Atletismo\",\"Hockey\",\"Ciclismo\"];\r\n\r\nconst posicionAleatoria = Math.floor(Math.random() * disciplinas.length);\r\nconst disciplina = disciplinas[posicionAleatoria];\r\n\r\nconst numero = Math.floor(Math.random() * 1000000);\r\nconst username = `clase de ${disciplina}-${numero}`;\r\n\r\npm.collectionVariables.set(\"disciplina_random\", disciplina);\r\npm.collectionVariables.set(\"username\", username);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"{{disciplina_random}}\",\r\n    \"detalles\": \"Para personas con experiencia, ejercicios de equilibrio.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/ia/descripcion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ia",
+                "descripcion"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "user",
       "item": [
         {
@@ -943,6 +1005,77 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Clima",
+      "item": [
+        {
+          "name": "getClima",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const departamentos = [\"artigas\",\"canelones\",\"cerro_largo\",\"colonia\",\"durazno\",\"flores\",\"florida\",\"lavalleja\",\"maldonado\",\"montevideo\",\"paysandu\",\"rio_negro\",\"rivera\",\"rocha\",\"salto\",\"san_jose\",\"soriano\",\"tacuarembo\",\"treinta_y_tres\"];\r\n\r\nconst posicion = Math.floor(Math.random() * departamentos.length);\r\nconst departamentoRandom = departamentos[posicion];\r\n\r\nconst diasAdelante = Math.floor(Math.random() * 14) + 1;\r\n\r\nconst fechaRandom = new Date();\r\nfechaRandom.setDate(fechaRandom.getDate() + diasAdelante);\r\n\r\nconst fechaFormateada = fechaRandom.toISOString().split(\"T\")[0];\r\n\r\npm.collectionVariables.set(\"departamento_random\", departamentoRandom);\r\npm.collectionVariables.set(\"fecha_random\", fechaFormateada);\r\n\r\nconsole.log(\r\n    \"URL resuelta:\",\r\n    pm.variables.replaceIn(pm.request.url.toString())\r\n);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/clima?departamento={{departamento_random}}&fecha={{fecha_random}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "clima"
+              ],
+              "query": [
+                {
+                  "key": "departamento",
+                  "value": "{{departamento_random}}"
+                },
+                {
+                  "key": "fecha",
+                  "value": "{{fecha_random}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [
@@ -992,6 +1125,18 @@
     },
     {
       "key": "id_disciplina",
+      "value": ""
+    },
+    {
+      "key": "disciplina_random",
+      "value": ""
+    },
+    {
+      "key": "departamento_random",
+      "value": ""
+    },
+    {
+      "key": "fecha_random",
       "value": ""
     }
   ]
