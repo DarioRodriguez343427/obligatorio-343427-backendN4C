@@ -1,6 +1,8 @@
 import { generateAccessToken } from "../../utils/token.util.js";
+import { Role } from "../../constants/role.constants.js";
 import { compararPassword } from "../../utils/validar-password.js";
 import { createUserService, getUserByEmailOrUsername } from "../services/auth.service.js";
+import { Estado } from "../../constants/estado.constants.js";
 
 
 
@@ -26,6 +28,10 @@ export const loginController = async (req, res) => {
 
     if (!valid) {
         return res.status(401).json({ message: "Credenciales invalidas" });
+    }
+
+    if (user.role === Role.cliente && user.estado !== Estado.activo) {
+        return res.status(403).json({ message: "El cliente está inactivo" });
     }
 
     const data = {
