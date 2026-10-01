@@ -11,3 +11,5 @@ API utilizada - weatherapi para indicar el clima y poder agendar entrenamientos 
 https://www.weatherapi.com/
 La misma fue configurada para consultar por parametros en la url el departamento y una fecha que cumpla con el rango permitido por la api
 
+
+
