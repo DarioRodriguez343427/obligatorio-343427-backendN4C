@@ -3,6 +3,8 @@ import { registerBodySchema } from "../schemas/register-body.schema.js";
 import { validateRequest } from "./validate.middleware.js";
 import { verifyAccessToken } from "../utils/token.util.js";
 import { Role } from "../constants/role.constants.js";
+import User from "../v1/models/user.model.js";
+import { Estado } from "../constants/estado.constants.js";
 
 
 
@@ -11,7 +13,8 @@ export const middlewareValidateRegisterBody = validateRequest(registerBodySchema
 
 
 
-export const authMiddleware = (req, res, next) => {
+export const authMiddleware = async (req, res, next) => {
+    let decoded;
     try {
         const authHeader = req.headers.authorization;
         if (!authHeader) {
@@ -26,12 +29,23 @@ export const authMiddleware = (req, res, next) => {
         }
         const token = authHeader.split(" ")[1];
         // 3. Verificar token
-        const decoded = verifyAccessToken(token);
-        // 4. Guardar datos en request
-        req.user = decoded;
-        next();
+        decoded = verifyAccessToken(token);
     } catch (error) {
         return res.status(401).json({ error: "token invalido" });
+    }
+
+    try {
+        const user = await User.findById(decoded.id);
+        if (!user) {
+            return res.status(401).json({ message: "Usuario no existe" });
+        }
+        if (user.role === Role.cliente && user.estado !== Estado.activo) {
+            return res.status(403).json({ message: "El cliente está inactivo" });
+        }
+        req.user = { ...decoded, role: user.role };
+        return next();
+    } catch (error) {
+        return next(error);
     }
 }
 

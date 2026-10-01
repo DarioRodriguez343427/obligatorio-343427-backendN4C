@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Role, Roles } from "../../constants/role.constants.js";
 import { Plan, Planes } from "../../constants/plan.constants.js";
+import { estados } from "../../constants/estado.constants.js";
 
 //parcial
 
@@ -28,6 +29,10 @@ const userSchema = new mongoose.Schema({
     plan: {
         type: String,
         enum: Planes,
+    },
+    estado: {
+        type: String,
+        enum: estados
     },
     password: {
         type: String,

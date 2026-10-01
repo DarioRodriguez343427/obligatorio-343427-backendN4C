@@ -60,7 +60,7 @@ export const deleteUserService = async (id) => {
 export const updateUserService = async (id, data) => {
     const userData = await prepareUserData(data);
 
-    const user = await User.findByIdAndUpdate(id, userData, {
+    const user = await User.findOneAndUpdate({ _id: id, role: Role.cliente }, userData, {
         returnDocument: "after",
         runValidators: true
     });
@@ -69,10 +69,20 @@ export const updateUserService = async (id, data) => {
 
 //reemplazar usuario
 export const replaceUserService = async (id, data) => {
+    const usuarioActual = await User.findOne({ _id: id, role: Role.cliente });
+
+    if (!usuarioActual) {
+        throw constructorError("Cliente no existe", 404);
+    }
+
     const userData = await prepareUserData(data);
 
+    userData.role = usuarioActual.role;
+    userData.plan = usuarioActual.plan;
+    userData.estado = usuarioActual.estado;
+
     const user = await User.findOneAndReplace(
-        { _id: id },
+        { _id: id, role: Role.cliente },
         userData,
         {
             returnDocument: "after",

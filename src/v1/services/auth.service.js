@@ -4,6 +4,7 @@ import { hashear } from "../../utils/validar-password.js";
 import { constructorError } from "../../utils/contructor.error.js";
 import { Role } from "../../constants/role.constants.js";
 import { Plan } from "../../constants/plan.constants.js";
+import { Estado } from "../../constants/estado.constants.js";
 
 export const getUserByEmailOrUsername = async (data) => {
     return await User.findOne({
@@ -31,6 +32,7 @@ export const createUserService = async (data) => {
         ...userData,
         role: Role.cliente,
         plan: Plan.plus,
+        estado: Estado.activo,
         password: passwordHash
     });
     
