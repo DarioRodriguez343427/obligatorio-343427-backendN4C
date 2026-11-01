@@ -3,8 +3,15 @@ import { middlewareErrores } from "./src/middleware/error.middleware.js";
 import apiRoutes from "./src/v1/routes/index.js";
 import "dotenv/config";
 import { connectMongo } from "./src/v1/config/mongo.config.js";
+import cors from 'cors';
 
 const app = express();
+
+app.use(cors({
+    origin: ['http://localhost:5000', 'http://localhost:5500', 'http://localhost:5173'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
+    maxAge: 86400
+}));
 
 app.use(express.json());
 
