@@ -38,7 +38,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         select: false
-    }
+    },
+    imageUrl: { type: String, required: false },
+    imagePublicId: { type: String, required: false }
 })
 
 userSchema.set('toJSON', {

@@ -5,11 +5,13 @@ import authRoutes from "./v1.auth.routes.js";
 import usersRoutes from "./v1.user.routes.js";
 import iaRoutes from "./v1.ia.routes.js";
 import climaRoutes from "./v1.clima.routes.js";
+import imageRoutes from "./v1.image.routes.js";
 
 const v1Routes = Router();
 
-v1Routes.use("/auth", authRoutes);
+v1Routes.use("/images", imageRoutes);
 
+v1Routes.use("/auth", authRoutes);
 
 v1Routes.use("/users", usersRoutes);
 v1Routes.use("/clases", clasesRoutes);

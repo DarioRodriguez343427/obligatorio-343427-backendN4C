@@ -1,9 +1,18 @@
 //aca importamos los services
 import { changeMyPlanService, deleteUserService, getUserByIdService, updateUserService, replaceUserService } from "../services/user.services.js";
+import { generateAccessToken } from "../../utils/token.util.js";
 
 export const changeMyPlanController = async (req, res) => {
 	const user = await changeMyPlanService(req.user.id);
-	return res.status(200).json(user);
+	const token = generateAccessToken({
+		id: user._id,
+		username: user.username,
+		name: user.name,
+		email: user.email,
+		role: user.role,
+		plan: user.plan
+	});
+	return res.status(200).json({ user, token });
 };
 
 

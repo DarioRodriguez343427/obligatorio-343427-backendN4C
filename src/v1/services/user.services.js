@@ -3,6 +3,7 @@ import { hashear } from "../../utils/validar-password.js";
 import { Role } from "../../constants/role.constants.js";
 import { Plan } from "../../constants/plan.constants.js";
 import { constructorError } from "../../utils/contructor.error.js";
+import { deleteImage } from "./image.service.js";
 
 export const changeMyPlanService = async (idUser) => {
     const user = await User.findById(idUser);
@@ -68,7 +69,12 @@ export const getUserByIdService = async (id) => {
 };
 
 export const deleteUserService = async (id) => {
-    const user = await User.findByIdAndDelete(id);
+    const user = await User.findById(id);
+    if (!user) return null;
+    if (user.imagePublicId) {
+        await deleteImage(user.imagePublicId);
+    }
+    await User.findByIdAndDelete(id);
     return user;
 };
 
@@ -98,6 +104,8 @@ export const replaceUserService = async (id, data) => {
     userData.role = usuarioActual.role;
     userData.plan = usuarioActual.plan;
     userData.estado = usuarioActual.estado;
+    userData.imageUrl = usuarioActual.imageUrl;
+    userData.imagePublicId = usuarioActual.imagePublicId;
 
     const user = await User.findOneAndReplace(
         { _id: id, role: Role.cliente },

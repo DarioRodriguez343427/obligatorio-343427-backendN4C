@@ -39,7 +39,8 @@ export const loginController = async (req, res) => {
         username: user.username,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        plan: user.plan
     }
     const token = generateAccessToken(data);
     return res.status(200).json({
@@ -57,7 +58,8 @@ export const registerController = async (req, res) => {
         username: user.username,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        plan: user.plan
     });
 
     return res.status(201).json({
