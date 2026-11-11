@@ -65,7 +65,7 @@ export const getUserByUsername = async (data) => {
 //crear usuario se lo delegamos a auth.services
 
 export const getAllUsersService = async () => {
-    return await User.find().select("name").sort({ name: 1, _id: 1 });
+    return await User.find({ role: Role.cliente }).select("username").sort({ username: 1, _id: 1 });
 };
 
 export const getUserByIdService = async (id) => {
