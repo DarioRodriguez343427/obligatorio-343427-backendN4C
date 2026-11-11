@@ -1,6 +1,6 @@
 import {Router} from "express";
 import { authMiddleware } from "../../middleware/auth.middleware.js";
-import { changeMyPlanController, deleteUserController, getUserByIdController, replaceUserController, updateUserController, updateUserByIdController } from "../controller/user.controller.js";
+import { changeMyPlanController, deleteUserController, getUserByIdController, getAllUsersController, replaceUserController, updateUserController, updateUserByIdController } from "../controller/user.controller.js";
 import { validateRolAdminMiddleware, validateRolClienteMiddleware } from "../../middleware/rol.middleware.js";
 import { middlewareReplaceUserValidateBody, middlewareUpdateUserValidateBody, middlewareUpdateMyUserValidateBody } from "../../middleware/user.middleware.js";
 
@@ -15,6 +15,8 @@ usersRoutes.patch("/plan", validateRolClienteMiddleware, changeMyPlanController)
 
 //solo admin
 usersRoutes.use(validateRolAdminMiddleware);
+
+usersRoutes.get("/", getAllUsersController);
 
 usersRoutes.patch("/:idUser", middlewareUpdateUserValidateBody, updateUserByIdController);
 usersRoutes.get("/:idUser", getUserByIdController);

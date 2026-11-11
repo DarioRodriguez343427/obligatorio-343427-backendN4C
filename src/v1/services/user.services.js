@@ -64,6 +64,10 @@ export const getUserByUsername = async (data) => {
 //CRUD
 //crear usuario se lo delegamos a auth.services
 
+export const getAllUsersService = async () => {
+    return await User.find().select("name").sort({ name: 1, _id: 1 });
+};
+
 export const getUserByIdService = async (id) => {
     return await User.findById(id);
 };
