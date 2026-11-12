@@ -8,7 +8,7 @@ import cors from 'cors';
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:5000', 'http://localhost:5500', 'http://localhost:5173'],
+    origin: ['http://localhost:5000', 'http://localhost:5500', 'http://localhost:5173', 'https://obligatorio-343427-frontend-n4-c.vercel.app'],
     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
     maxAge: 86400
 }));
